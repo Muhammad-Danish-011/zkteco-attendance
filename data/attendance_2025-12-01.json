@@ -5371,5 +5371,23 @@
     "name": "Syed Ahsan Moon Taqi",
     "type": "OUT",
     "deviceIP": "192.168.18.252"
+  },
+  {
+    "userSn": 29647,
+    "deviceUserId": "32",
+    "recordTime": "2025-12-01T09:58:15.000Z",
+    "ip": "192.168.18.253",
+    "name": "Kamran Tayyab",
+    "type": "IN",
+    "deviceIP": "192.168.18.253"
+  },
+  {
+    "userSn": 29915,
+    "deviceUserId": "56",
+    "recordTime": "2025-12-01T09:46:55.000Z",
+    "ip": "192.168.18.252",
+    "name": "Roshan Noman",
+    "type": "OUT",
+    "deviceIP": "192.168.18.252"
   }
 ]
