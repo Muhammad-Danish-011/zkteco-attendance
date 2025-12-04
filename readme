@@ -17,6 +17,8 @@ pm2 startup
 
 
 pm2 restart zkteco-service
+pm2 save
+pm2 startup
 pm2 status
 pm2 list
 pm2 stop zkteco-service
