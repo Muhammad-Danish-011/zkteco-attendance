@@ -23,6 +23,9 @@ call npm install
 echo.
 echo 3. Installing PM2...
 call npm install -g pm2
+call npm install -g pm2-windows-startup
+call pm2-windows-startup install
+call pm2-windows-startup save
 
 echo.
 echo 4. Starting service...

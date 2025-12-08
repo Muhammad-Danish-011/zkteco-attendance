@@ -1,24 +1,237 @@
-1.  Node.js install karein
+# ZKTeco Attendance – Windows + PM2 (README)
 
-2. Folder banayein: Desktop\zkteco-attendance
+This guide explains **step-by-step** how to run and auto-start the ZKTeco attendance app on **Windows** using **PM2 + Task Scheduler**.
 
-3. Yeh 3 files copy karein: app.js, package.json, auto-start.bat
+---
 
-4. Command Prompt open karein:
+## ✅ Requirements
 
-cmd
+* Windows 10 / 11
+* Node.js (LTS version)
+* Internet access (for npm install)
+
+---
+
+## 1️⃣ Install Node.js
+
+Install Node.js **LTS** from the official website.
+
+After installation, verify:
+
+```bat
+node -v
+npm -v
+```
+
+---
+
+## 2️⃣ Project Folder Setup
+
+Create the folder:
+
+```
+Desktop\zkteco-attendance
+```
+
+Inside this folder, place the following **required files**:
+
+* `app.js`
+* `package.json`
+
+> ❌ `auto-start.bat` is **not required** when using PM2 + Task Scheduler
+
+---
+
+## 3️⃣ Install Dependencies
+
+Open **Command Prompt (Normal)** and run:
+
+```bat
 cd Desktop\zkteco-attendance
 npm install
+```
+
+---
+
+## 4️⃣ Install PM2
+
+```bat
 npm install -g pm2
-pm2 startup
+```
 
+Verify installation:
 
+```bat
+pm2 -v
+```
 
+---
 
+## 5️⃣ Start App with PM2
 
-pm2 restart zkteco-service
-pm2 save
-pm2 startup
-pm2 status
+```bat
+pm2 start app.js --name zkteco-service
+```
+
+Check status:
+
+```bat
 pm2 list
-pm2 stop zkteco-service
+```
+
+---
+
+## 6️⃣ Save PM2 Process List (IMPORTANT)
+
+```bat
+pm2 save
+```
+
+This creates the file:
+
+```
+C:\Users\Ahmed\.pm2\dump.pm2
+```
+
+---
+
+## 🚫 IMPORTANT (Windows Users)
+
+The following commands **DO NOT work on Windows**:
+
+```bat
+pm2 startup
+pm2-windows-startup
+```
+
+✅ Windows **must** use **Task Scheduler**.
+
+---
+
+## 7️⃣ Auto Start with Windows Task Scheduler
+
+### Open Task Scheduler
+
+* Press **Win + R**
+* Type:
+
+```
+taskschd.msc
+```
+
+* Click **Create Task** (NOT Create Basic Task)
+
+---
+
+### 🔹 General Tab
+
+* Name: `PM2 Auto Start`
+* ✅ Run whether user is logged on or not
+* ✅ Run with highest privileges
+
+---
+
+### 🔹 Triggers Tab
+
+* Click **New**
+* Begin the task: **At startup**
+* Click **OK**
+
+---
+
+### 🔹 Actions Tab (MOST IMPORTANT)
+
+Click **New** and set:
+
+**Program/script**
+
+```
+C:\Program Files\nodejs\node.exe
+```
+
+**Add arguments**
+
+```
+C:\Users\Ahmed\AppData\Roaming\npm\node_modules\pm2\bin\pm2 resurrect
+```
+
+**Start in**
+
+```
+C:\Users\Ahmed
+```
+
+> ✅ Only `pm2 resurrect` should be used here
+
+---
+
+### 🔹 Conditions Tab
+
+* ❌ Uncheck: `Start the task only if the computer is on AC power`
+
+---
+
+### 🔹 Settings Tab
+
+* ✅ Allow task to be run on demand
+* ✅ Restart if the task fails
+* ❌ stop the task if its run longer than 
+
+
+---
+
+### Save Task
+
+* Click **OK**
+* Enter Windows user password
+
+---
+
+## 8️⃣ Testing
+
+### Test without restart
+
+* In Task Scheduler → Right-click **PM2 Auto Start** → **Run**
+* Open CMD:
+
+```bat
+pm2 list
+```
+
+✅ `zkteco-service` should be running
+
+---
+
+### Final Test (Mandatory)
+
+* Restart the PC
+* Open CMD and run:
+
+```bat
+pm2 list
+```
+
+✅ App auto-starts successfully
+
+---
+
+## ✅ Useful PM2 Commands (Manual Use)
+
+| Purpose      | Command                      |
+| ------------ | ---------------------------- |
+| Restart app  | `pm2 restart zkteco-service` |
+| Stop app     | `pm2 stop zkteco-service`    |
+| Check status | `pm2 list`                   |
+| Save changes | `pm2 save`                   |
+
+---
+
+## ✅ Final Rule
+
+> **Windows + PM2 = Task Scheduler + `pm2 resurrect`**
+
+This setup is stable, production-safe, and recommended for ZKTeco attendance systems.
+
+---
+
+✅ END OF README
