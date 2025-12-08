@@ -1,52 +1,49 @@
 @echo off
-title ZKTeco Auto Service Starter
+title ZKTeco Attendance - One Time Setup
+
 echo ========================================
-echo    ZKTeco Auto Attendance Service
+echo   ZKTeco Attendance - One Time Setup
 echo ========================================
 echo.
 
-cd /d "C:\Users\%USERNAME%\Desktop\zkteco-attendance"
+cd /d "%USERPROFILE%\Desktop\zkteco-attendance"
 
-echo 1. Checking Node.js...
-node --version
+echo Checking Node.js...
+node -v >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Node.js not installed!
-    echo Please install Node.js from nodejs.org
+    echo ❌ Node.js not installed!
+    echo Please install Node.js LTS from https://nodejs.org
     pause
-    exit
+    exit /b
 )
 
 echo.
-echo 2. Installing dependencies...
-call npm install
+echo Installing dependencies...
+npm install
 
 echo.
-echo 3. Installing PM2...
-call npm install -g pm2
-call npm install -g pm2-windows-startup
-call pm2-windows-startup install
-call pm2-windows-startup save
+echo Installing PM2 (if not installed)...
+npm install -g pm2
 
 echo.
-echo 4. Starting service...
+echo Starting app with PM2...
 pm2 start app.js --name zkteco-service
 
 echo.
-echo 5. Setting up auto-start...
+echo Saving PM2 process list...
 pm2 save
-pm2 startup
 
 echo.
 echo ========================================
-echo        SETUP COMPLETED SUCCESSFULLY!
+echo ✅ SETUP COMPLETED SUCCESSFULLY
 echo ========================================
 echo.
-echo ✅ Service is now running
-echo 🔄 Auto-start enabled
-echo 📊 Check: http://localhost:5000
-echo 📁 Data Folder: Desktop\zkteco-attendance\data
+echo • Service name: zkteco-service
+echo • Auto start: ENABLED via Task Scheduler
+echo • Local URL: http://localhost:3000
 echo.
-echo ⚡ Ab ye service har baar computer on hote hi
-echo    automatically start ho jayegi!
+echo ⚠️ IMPORTANT:
+echo Task Scheduler MUST be configured separately
+echo to run: pm2 resurrect at system startup
 echo.
 pause
